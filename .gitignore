@@ -1,0 +1,18 @@
+# node.js
+node_modules
+dist
+npm-debug.log*
+package-lock.json
+
+# firebase
+serviceAccountKey.json
+
+# environment
+.env
+
+# os
+.DS_Store
+Thumbs.db
+
+#excel_files
+invite_requests.xlsx

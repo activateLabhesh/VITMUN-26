@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  app:
+    # Build the image using the Dockerfile in the current directory
+    build: .
+    
+    # Map your computer's port 4000 to the container's port 4000
+    ports:
+      - "4000:4000"
+      
+    environment:
+      # Tell the app to run in production mode
+      NODE_ENV: production
+      
+      # Read the JSON key from your .env file and pass it to the container
+      GOOGLE_APPLICATION_CREDENTIALS_JSON: ${GOOGLE_APPLICATION_CREDENTIALS_JSON}
+      
+    volumes:
+      # This syncs your local 'data' folder with the container's 'data' folder
+      # so your Excel files are saved back to your computer.
+      - ./data:/app/data

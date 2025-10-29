@@ -1,0 +1,13 @@
+# Exclude node_modules, as they are installed in the container
+node_modules
+
+# Exclude build output, if it exists locally
+dist
+
+# Exclude git and other local files
+.git
+.gitignore
+.env
+README.md
+serviceAccountKey.json
+invite_requests.xlsx
