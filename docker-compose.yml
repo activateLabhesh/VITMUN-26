@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   app:
     # Build the image using the Dockerfile in the current directory
@@ -13,7 +12,7 @@ services:
       NODE_ENV: production
       
       # Read the JSON key from your .env file and pass it to the container
-      GOOGLE_APPLICATION_CREDENTIALS_JSON: ${GOOGLE_APPLICATION_CREDENTIALS_JSON}
+      mongodb_uri: ${mongodb_uri}
       
     volumes:
       # This syncs your local 'data' folder with the container's 'data' folder

@@ -1,8 +1,8 @@
 
-import { db } from '../firebase'; 
-import ExcelJS from 'exceljs'; 
-import path from 'path'; 
-import fs from 'fs'; 
+import Registration from '../models/registrationmodel'; // <-- Import Mongoose Model
+import ExcelJS from 'exceljs';
+import path from 'path';
+import fs from 'fs';
 
 interface CommitteePreference {
     committee: string;
@@ -26,8 +26,8 @@ export interface RegistrationData {
     ebExpCount: string;
     ebExpNames: string;
 }
-
-const FILE_PATH = path.join(__dirname, '..','..','data', 'registrations.xlsx');
+// --- Excel Constants (no change) ---
+const FILE_PATH = path.join(__dirname, '..', '..', 'data', 'registrations.xlsx'); // Adjusted path
 const SHEET_NAME = 'Delegates';
 const HEADERS = [
     'Participant Name', 'Registration Number', 'Contact Number', 'Email ID',
@@ -38,24 +38,30 @@ const HEADERS = [
     'Delegate Exp Count', 'Delegate Exp Names', 'EB Exp Count', 'EB Exp Names'
 ];
 
+// --- Excel Helper (no change) ---
 async function getRegistrationWorksheet(workbook: ExcelJS.Workbook): Promise<ExcelJS.Worksheet> {
     const sheet = workbook.getWorksheet(SHEET_NAME);
-    if (sheet) {
-        return sheet;
-    }
+    if (sheet) { return sheet; }
     const newSheet = workbook.addWorksheet(SHEET_NAME);
     newSheet.addRow(HEADERS);
     return newSheet;
 }
 
+/**
+ * Saves one registration data object to BOTH MongoDB and Excel.
+ */
 export const saveinfo = async (data: RegistrationData): Promise<void> => {
     
-    const firestorePromise = db.collection('registrations').add(data);
+    // --- Task 1: Save to MongoDB ---
+    // Create a new instance of the Mongoose model
+    const newRegistration = new Registration(data);
+    // save() returns a promise, perfect for Promise.all
+    const mongoPromise = newRegistration.save();
 
+    // --- Task 2: Save to Excel (no change) ---
     const excelPromise = (async () => {
         const workbook = new ExcelJS.Workbook();
         let worksheet: ExcelJS.Worksheet;
-
         try {
             if (fs.existsSync(FILE_PATH)) {
                 await workbook.xlsx.readFile(FILE_PATH);
@@ -82,9 +88,10 @@ export const saveinfo = async (data: RegistrationData): Promise<void> => {
         await workbook.xlsx.writeFile(FILE_PATH);
     })();
 
+    // --- Run both tasks in parallel (no change) ---
     try {
-        await Promise.all([firestorePromise, excelPromise]);
-        console.log('Successfully saved to Firestore and Excel');
+        await Promise.all([mongoPromise, excelPromise]);
+        console.log('Successfully saved to MongoDB and Excel');
     } catch (error) {
         console.error('Error saving data to one or more services: ', error);
         throw new Error('Failed to save data to one or more destinations.');
