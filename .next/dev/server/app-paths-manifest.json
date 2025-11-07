@@ -1,0 +1,6 @@
+{
+  "/api/admin/ext-del/route": "app/api/admin/ext-del/route.js",
+  "/api/admin/external-delegates/route": "app/api/admin/external-delegates/route.js",
+  "/api/admin/login/route": "app/api/admin/login/route.js",
+  "/api/admin/update-delegate/route": "app/api/admin/update-delegate/route.js"
+}

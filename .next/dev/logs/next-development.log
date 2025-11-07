@@ -1,0 +1,4 @@
+[00:00:01.084] Server  LOG      ✓ Ready in 750ms
+[00:00:06.718] Server  LOG      ○ Compiling /api/admin/login ...
+[00:00:44.108] Server  LOG     req {}
+[00:03:46.138] Server  LOG     req {}
